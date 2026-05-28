@@ -309,10 +309,15 @@ h1,h2,h3,.font-display{font-family:'Syne',sans-serif}
     <div class="login-err" id="loginErr">Usuario o contraseña incorrectos.</div>
     <div class="login-users">
       <p>Accesos rápidos (demo)</p>
-      <span class="user-chip" onclick="quickLogin('admin','ngo2026')">admin</span>
-      <span class="user-chip" onclick="quickLogin('fcardozo','tokyo2026')">F. Cardozo</span>
-      <span class="user-chip" onclick="quickLogin('gsulin','philips2026')">G. Sulin</span>
-      <span class="user-chip" onclick="quickLogin('dperez','ana2026')">D. Perez</span>
+      <span class="user-chip" onclick="quickLogin('admin','ngo2026')">🔑 admin</span>
+      <span class="user-chip" onclick="quickLogin('fcardozo','tokyo123')">F. Cardozo</span>
+      <span class="user-chip" onclick="quickLogin('fbaez','cph123')">F. Báez</span>
+      <span class="user-chip" onclick="quickLogin('avinals','mabe123')">A. Viñales</span>
+      <span class="user-chip" onclick="quickLogin('respinola','remi123')">R. Espínola</span>
+      <span class="user-chip" onclick="quickLogin('gsulin','philips123')">G. Sulin</span>
+      <span class="user-chip" onclick="quickLogin('mvera','gastro123')">M. Vera</span>
+      <span class="user-chip" onclick="quickLogin('dperez','dahiana123')">D. Perez</span>
+      <span class="user-chip" onclick="quickLogin('sdavey','sandra123')">S. Davey</span>
     </div>
   </div>
 </div>
@@ -1161,15 +1166,15 @@ function chartDefaults(){
 // AUTH
 // ══════════════════════════════════════════════════════════════════
 const USERS={
-  'admin':{pass:'ngo2026',role:'admin',name:'Administrador',empresa:''},
-  'fcardozo':{pass:'tokyo2026',role:'brand_manager',name:'Fernando Cardozo',marcas:['TOKYO'],empresa:'NGO SAECA'},
-  'fbaez':{pass:'whirl2026',role:'brand_manager',name:'Fabiola Báez',marcas:['WHIRLPOOL','ARNO','MOULINEX','KRUPS','KITCHENAID'],empresa:'CPH SA'},
-  'avinals':{pass:'mabe2026',role:'brand_manager',name:'Adrian Viñales',marcas:['MABE','HAIER','JVC'],empresa:'NGO SAECA'},
-  'respinola':{pass:'remi2026',role:'brand_manager',name:'Romina Espínola',marcas:['REMINGTON','BLACK & DECKER','NOGAL','EVOLUTION'],empresa:'NGO SAECA'},
-  'gsulin':{pass:'philips2026',role:'brand_manager',name:'Gisselle Sulin',marcas:['PHILIPS','TRAPP','V3LOZ','MICHELIN'],empresa:'CPH SA'},
-  'mvera':{pass:'gastro2026',role:'brand_manager',name:'Mathias Vera',marcas:['DIV. GASTRONÓMICA','DIV. CORPORATIVA'],empresa:'NGO SAECA'},
-  'dperez':{pass:'ana2026',role:'analyst',name:'Dahiana Perez',empresa:''},
-  'sdavey':{pass:'san2026',role:'analyst',name:'Sandra Davey',empresa:''},
+  'admin':      {pass:'ngo2026',    role:'admin',         name:'Administrador',   empresa:'',         marcas:[]},
+  'fcardozo':   {pass:'tokyo123',   role:'brand_manager', name:'Fernando Cardozo',empresa:'NGO SAECA', marcas:['TOKYO']},
+  'fbaez':      {pass:'cph123',     role:'brand_manager', name:'Fabiola Báez',    empresa:'CPH SA',    marcas:['WHIRLPOOL','ARNO','MOULINEX','KRUPS','KITCHENAID']},
+  'avinals':    {pass:'mabe123',    role:'brand_manager', name:'Adrian Viñales',  empresa:'NGO SAECA', marcas:['MABE','HAIER','JVC']},
+  'respinola':  {pass:'remi123',    role:'brand_manager', name:'Romina Espínola', empresa:'NGO SAECA', marcas:['REMINGTON','EVOLUTION','NOGAL','BLACK & DECKER']},
+  'gsulin':     {pass:'philips123', role:'brand_manager', name:'Gisselle Sulin',  empresa:'CPH SA',    marcas:['PHILIPS','TRAPP','V3LOZ','MICHELIN']},
+  'mvera':      {pass:'gastro123',  role:'brand_manager', name:'Mathias Vera',    empresa:'NGO SAECA', marcas:['DIV. GASTRONÓMICA','DIV. CORPORATIVA']},
+  'dperez':     {pass:'dahiana123', role:'analyst',       name:'Dahiana Perez',   empresa:'',          marcas:[]},
+  'sdavey':     {pass:'sandra123',  role:'analyst',       name:'Sandra Davey',    empresa:'',          marcas:[]},
 };
 
 let currentUser=null;
@@ -1177,27 +1182,41 @@ let currentUser=null;
 function quickLogin(u,p){
   document.getElementById('loginUser').value=u;
   document.getElementById('loginPass').value=p;
+  document.getElementById('loginErr').style.display='none';
   doLogin();
 }
 
 function doLogin(){
   const u=document.getElementById('loginUser').value.trim().toLowerCase();
-  const p=document.getElementById('loginPass').value;
+  const p=document.getElementById('loginPass').value.trim();
   const user=USERS[u];
-  if(user&&user.pass===p){
+  const errEl=document.getElementById('loginErr');
+  if(user && user.pass===p){
     currentUser={...user,username:u};
-    document.getElementById('loginErr').style.display='none';
-    // Apply role restrictions
-    if(user.empresa){document.getElementById('fEmpresa').value=user.empresa;F.empresa=user.empresa;}
-    document.getElementById('sidebarInitial').textContent=user.name.charAt(0);
+    errEl.style.display='none';
+    // Apply empresa filter for brand managers
+    if(user.empresa){
+      document.getElementById('fEmpresa').value=user.empresa;
+      F.empresa=user.empresa;
+    }
+    // Apply marca filter if single marca
+    if(user.marcas && user.marcas.length===1){
+      F.marca=user.marcas[0];
+    }
+    document.getElementById('sidebarInitial').textContent=user.name.charAt(0).toUpperCase();
     document.getElementById('sidebarName').textContent=user.name;
-    document.getElementById('sidebarRole').textContent=user.role==='admin'?'Administrador':user.role==='brand_manager'?'Brand Manager':'Analista';
+    const roleLabels={admin:'Administrador',brand_manager:'Brand Manager',analyst:'Analista'};
+    document.getElementById('sidebarRole').textContent=roleLabels[user.role]||user.role;
+    // Hide datos tab for non-admins/analysts
     document.getElementById('loginScreen').style.display='none';
     document.getElementById('app').style.display='flex';
     updateMarcaFilter();
     initApp();
-  }else{
-    document.getElementById('loginErr').style.display='block';
+  } else {
+    errEl.style.display='block';
+    errEl.textContent='Usuario o contraseña incorrectos.';
+    document.getElementById('loginPass').value='';
+    document.getElementById('loginPass').focus();
   }
 }
 
