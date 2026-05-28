@@ -895,6 +895,12 @@ h1,h2,h3,.font-display{font-family:'Syne',sans-serif}
 </div><!-- /app -->
 
 <script>
+// ── Cargar datos reales si existen ──────────────────────────
+// El archivo datos_dashboard.js es generado por exportar_datos.py
+// Si no existe, se usan los datos de muestra generados abajo
+</script>
+<script src="datos_dashboard.js" onerror="console.log('Usando datos de muestra')"></script>
+<script>
 // ══════════════════════════════════════════════════════════════════
 // DATA LAYER — SAMPLE DATA GENERATION
 // ══════════════════════════════════════════════════════════════════
@@ -1137,7 +1143,14 @@ function generateVentas(){
 }
 
 let DB={ventas:[]};
-DB.ventas=generateVentas();
+// Si se cargó datos_dashboard.js (datos reales), usarlos
+if(typeof window.DATOS_REALES !== 'undefined' && window.DATOS_REALES.length > 0){
+  DB.ventas = window.DATOS_REALES;
+  console.log('✅ Datos reales cargados:', DB.ventas.length, 'registros');
+} else {
+  DB.ventas = generateVentas();
+  console.log('ℹ️  Usando datos de muestra:', DB.ventas.length, 'registros');
+}
 
 // ──────────────────────────────────────────
 // FILTER STATE
