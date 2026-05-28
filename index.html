@@ -38,24 +38,19 @@
 html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
 h1,h2,h3,.font-display{font-family:'Syne',sans-serif}
 
-/* ── LOGIN ── */
-#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#0D1B2A 0%,#162436 40%,#1648C2 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
-.login-card{background:rgba(255,255,255,.05);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:48px 40px;width:380px;text-align:center}
+/* ── USER SELECTOR ── */
+#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#0D1B2A 0%,#162436 40%,#1648C2 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow-y:auto}
+.login-card{background:rgba(255,255,255,.06);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:36px 32px;text-align:center}
 .login-logo{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:4px}
 .login-logo span{color:#0EA5E9}
-.login-sub{color:rgba(255,255,255,.5);font-size:13px;margin-bottom:36px}
-.login-field{margin-bottom:16px;text-align:left}
-.login-field label{display:block;color:rgba(255,255,255,.6);font-size:12px;font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
-.login-field input{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:12px 16px;color:#fff;font-size:14px;outline:none;transition:.2s}
-.login-field input::placeholder{color:rgba(255,255,255,.3)}
-.login-field input:focus{border-color:#0EA5E9;background:rgba(14,165,233,.1)}
-.login-btn{width:100%;background:linear-gradient(135deg,#1648C2,#0EA5E9);border:none;border-radius:10px;padding:14px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;margin-top:8px;transition:.2s;font-family:'DM Sans',sans-serif}
-.login-btn:hover{transform:translateY(-1px);box-shadow:0 8px 25px rgba(22,72,194,.4)}
-.login-err{color:#FF6B6B;font-size:13px;margin-top:10px;display:none}
-.login-users{margin-top:24px;border-top:1px solid rgba(255,255,255,.08);padding-top:20px}
-.login-users p{color:rgba(255,255,255,.35);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
-.user-chip{display:inline-block;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:4px 12px;font-size:11px;color:rgba(255,255,255,.5);margin:3px;cursor:pointer;transition:.2s}
-.user-chip:hover{background:rgba(14,165,233,.2);border-color:#0EA5E9;color:#0EA5E9}
+.login-sub{color:rgba(255,255,255,.45);font-size:13px;margin-bottom:24px}
+.user-select-card{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 16px;cursor:pointer;transition:.18s;text-align:left}
+.user-select-card:hover{background:rgba(14,165,233,.18);border-color:#0EA5E9;transform:translateY(-2px);box-shadow:0 8px 24px rgba(14,165,233,.2)}
+.usc-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+.usc-info{flex:1;overflow:hidden}
+.usc-name{font-size:14px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.usc-role{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.usc-arrow{color:rgba(255,255,255,.3);font-size:18px;flex-shrink:0}
 
 /* ── APP SHELL ── */
 #app{display:flex;height:100vh;overflow:hidden;display:none}
@@ -292,32 +287,90 @@ h1,h2,h3,.font-display{font-family:'Syne',sans-serif}
 </head>
 <body>
 
-<!-- ════════════════ LOGIN ════════════════ -->
+<!-- ════════════════ SELECTOR DE USUARIO ════════════════ -->
 <div id="loginScreen">
-  <div class="login-card">
+  <div class="login-card" style="width:520px;max-width:95vw">
     <div class="login-logo">Grupo<span>NGO</span></div>
-    <div class="login-sub">Dashboard Comercial 2026</div>
-    <div class="login-field">
-      <label>Usuario</label>
-      <input type="text" id="loginUser" placeholder="usuario" autocomplete="username">
-    </div>
-    <div class="login-field">
-      <label>Contraseña</label>
-      <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
-    </div>
-    <button class="login-btn" onclick="doLogin()">Ingresar →</button>
-    <div class="login-err" id="loginErr">Usuario o contraseña incorrectos.</div>
-    <div class="login-users">
-      <p>Accesos rápidos (demo)</p>
-      <span class="user-chip" onclick="quickLogin('admin','ngo2026')">🔑 admin</span>
-      <span class="user-chip" onclick="quickLogin('fcardozo','tokyo123')">F. Cardozo</span>
-      <span class="user-chip" onclick="quickLogin('fbaez','cph123')">F. Báez</span>
-      <span class="user-chip" onclick="quickLogin('avinals','mabe123')">A. Viñales</span>
-      <span class="user-chip" onclick="quickLogin('respinola','remi123')">R. Espínola</span>
-      <span class="user-chip" onclick="quickLogin('gsulin','philips123')">G. Sulin</span>
-      <span class="user-chip" onclick="quickLogin('mvera','gastro123')">M. Vera</span>
-      <span class="user-chip" onclick="quickLogin('dperez','dahiana123')">D. Perez</span>
-      <span class="user-chip" onclick="quickLogin('sdavey','sandra123')">S. Davey</span>
+    <div class="login-sub">Dashboard Comercial 2026 — Seleccioná tu usuario</div>
+
+    <div id="userGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
+
+      <!-- Admin -->
+      <div class="user-select-card" onclick="selectUser('admin')" style="grid-column:1/-1">
+        <div class="usc-avatar" style="background:linear-gradient(135deg,#1648C2,#0EA5E9)">A</div>
+        <div class="usc-info">
+          <div class="usc-name">Administrador</div>
+          <div class="usc-role">Acceso completo · Ambas empresas</div>
+        </div>
+        <div class="usc-arrow">→</div>
+      </div>
+
+      <!-- Brand Managers -->
+      <div class="user-select-card" onclick="selectUser('fcardozo')">
+        <div class="usc-avatar" style="background:linear-gradient(135deg,#F97316,#FBBF24)">FC</div>
+        <div class="usc-info">
+          <div class="usc-name">Fernando Cardozo</div>
+          <div class="usc-role">Brand Manager · Tokyo</div>
+        </div>
+      </div>
+
+      <div class="user-select-card" onclick="selectUser('fbaez')">
+        <div class="usc-avatar" style="background:linear-gradient(135deg,#0EA5E9,#06B6D4)">FB</div>
+        <div class="usc-info">
+          <div class="usc-name">Fabiola Báez</div>
+          <div class="usc-role">Brand Manager · Whirlpool, Moulinex…</div>
+        </div>
+      </div>
+
+      <div class="user-select-card" onclick="selectUser('avinals')">
+        <div class="usc-avatar" style="background:linear-gradient(135deg,#10B981,#059669)">AV</div>
+        <div class="usc-info">
+          <div class="usc-name">Adrian Viñales</div>
+          <div class="usc-role">Brand Manager · Mabe, Haier, JVC</div>
+        </div>
+      </div>
+
+      <div class="user-select-card" onclick="selectUser('respinola')">
+        <div class="usc-avatar" style="background:linear-gradient(135deg,#EF4444,#F97316)">RE</div>
+        <div class="usc-info">
+          <div class="usc-name">Romina Espínola</div>
+          <div class="usc-role">Brand Manager · Remington, B&D…</div>
+        </div>
+      </div>
+
+      <div class="user-select-card" onclick="selectUser('gsulin')">
+        <div class="usc-avatar" style="background:linear-gradient(135deg,#8B5CF6,#6D28D9)">GS</div>
+        <div class="usc-info">
+          <div class="usc-name">Gisselle Sulin</div>
+          <div class="usc-role">Brand Manager · Philips, Trapp…</div>
+        </div>
+      </div>
+
+      <div class="user-select-card" onclick="selectUser('mvera')">
+        <div class="usc-avatar" style="background:linear-gradient(135deg,#1648C2,#7C3AED)">MV</div>
+        <div class="usc-info">
+          <div class="usc-name">Mathias Vera</div>
+          <div class="usc-role">Brand Manager · Gastro, Corporativo</div>
+        </div>
+      </div>
+
+      <!-- Analistas -->
+      <div class="user-select-card" onclick="selectUser('dperez')">
+        <div class="usc-avatar" style="background:linear-gradient(135deg,#EC4899,#F43F5E)">DP</div>
+        <div class="usc-info">
+          <div class="usc-name">Dahiana Perez</div>
+          <div class="usc-role">Analista de Marketing</div>
+        </div>
+      </div>
+
+      <div class="user-select-card" onclick="selectUser('sdavey')">
+        <div class="usc-avatar" style="background:linear-gradient(135deg,#14B8A6,#0D9488)">SD</div>
+        <div class="usc-info">
+          <div class="usc-name">Sandra Davey</div>
+          <div class="usc-role">Analista de Marketing</div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -1163,72 +1216,63 @@ function chartDefaults(){
 }
 
 // ══════════════════════════════════════════════════════════════════
-// AUTH
+// AUTH — selector de usuario (sin contraseña)
 // ══════════════════════════════════════════════════════════════════
 const USERS={
-  'admin':      {pass:'ngo2026',    role:'admin',         name:'Administrador',   empresa:'',         marcas:[]},
-  'fcardozo':   {pass:'tokyo123',   role:'brand_manager', name:'Fernando Cardozo',empresa:'NGO SAECA', marcas:['TOKYO']},
-  'fbaez':      {pass:'cph123',     role:'brand_manager', name:'Fabiola Báez',    empresa:'CPH SA',    marcas:['WHIRLPOOL','ARNO','MOULINEX','KRUPS','KITCHENAID']},
-  'avinals':    {pass:'mabe123',    role:'brand_manager', name:'Adrian Viñales',  empresa:'NGO SAECA', marcas:['MABE','HAIER','JVC']},
-  'respinola':  {pass:'remi123',    role:'brand_manager', name:'Romina Espínola', empresa:'NGO SAECA', marcas:['REMINGTON','EVOLUTION','NOGAL','BLACK & DECKER']},
-  'gsulin':     {pass:'philips123', role:'brand_manager', name:'Gisselle Sulin',  empresa:'CPH SA',    marcas:['PHILIPS','TRAPP','V3LOZ','MICHELIN']},
-  'mvera':      {pass:'gastro123',  role:'brand_manager', name:'Mathias Vera',    empresa:'NGO SAECA', marcas:['DIV. GASTRONÓMICA','DIV. CORPORATIVA']},
-  'dperez':     {pass:'dahiana123', role:'analyst',       name:'Dahiana Perez',   empresa:'',          marcas:[]},
-  'sdavey':     {pass:'sandra123',  role:'analyst',       name:'Sandra Davey',    empresa:'',          marcas:[]},
+  'admin':     {role:'admin',         name:'Administrador',   empresa:'',          marcas:[]},
+  'fcardozo':  {role:'brand_manager', name:'Fernando Cardozo',empresa:'NGO SAECA', marcas:['TOKYO']},
+  'fbaez':     {role:'brand_manager', name:'Fabiola Báez',    empresa:'CPH SA',    marcas:['WHIRLPOOL','ARNO','MOULINEX','KRUPS','KITCHENAID']},
+  'avinals':   {role:'brand_manager', name:'Adrian Viñales',  empresa:'NGO SAECA', marcas:['MABE','HAIER','JVC']},
+  'respinola': {role:'brand_manager', name:'Romina Espínola', empresa:'NGO SAECA', marcas:['REMINGTON','EVOLUTION','NOGAL','BLACK & DECKER']},
+  'gsulin':    {role:'brand_manager', name:'Gisselle Sulin',  empresa:'CPH SA',    marcas:['PHILIPS','TRAPP','V3LOZ','MICHELIN']},
+  'mvera':     {role:'brand_manager', name:'Mathias Vera',    empresa:'NGO SAECA', marcas:['DIV. GASTRONÓMICA','DIV. CORPORATIVA']},
+  'dperez':    {role:'analyst',       name:'Dahiana Perez',   empresa:'',          marcas:[]},
+  'sdavey':    {role:'analyst',       name:'Sandra Davey',    empresa:'',          marcas:[]},
 };
 
 let currentUser=null;
 
-function quickLogin(u,p){
-  document.getElementById('loginUser').value=u;
-  document.getElementById('loginPass').value=p;
-  document.getElementById('loginErr').style.display='none';
-  doLogin();
-}
+function selectUser(username){
+  const user=USERS[username];
+  if(!user) return;
+  currentUser={...user, username};
 
-function doLogin(){
-  const u=document.getElementById('loginUser').value.trim().toLowerCase();
-  const p=document.getElementById('loginPass').value.trim();
-  const user=USERS[u];
-  const errEl=document.getElementById('loginErr');
-  if(user && user.pass===p){
-    currentUser={...user,username:u};
-    errEl.style.display='none';
-    // Apply empresa filter for brand managers
-    if(user.empresa){
-      document.getElementById('fEmpresa').value=user.empresa;
-      F.empresa=user.empresa;
-    }
-    // Apply marca filter if single marca
-    if(user.marcas && user.marcas.length===1){
-      F.marca=user.marcas[0];
-    }
-    document.getElementById('sidebarInitial').textContent=user.name.charAt(0).toUpperCase();
-    document.getElementById('sidebarName').textContent=user.name;
-    const roleLabels={admin:'Administrador',brand_manager:'Brand Manager',analyst:'Analista'};
-    document.getElementById('sidebarRole').textContent=roleLabels[user.role]||user.role;
-    // Hide datos tab for non-admins/analysts
-    document.getElementById('loginScreen').style.display='none';
-    document.getElementById('app').style.display='flex';
-    updateMarcaFilter();
-    initApp();
+  // Aplicar filtros según rol
+  F={empresa:'', marca:'', año:'', mes:''};
+  if(user.empresa){
+    document.getElementById('fEmpresa').value=user.empresa;
+    F.empresa=user.empresa;
   } else {
-    errEl.style.display='block';
-    errEl.textContent='Usuario o contraseña incorrectos.';
-    document.getElementById('loginPass').value='';
-    document.getElementById('loginPass').focus();
+    document.getElementById('fEmpresa').value='';
   }
+
+  // Sidebar
+  const initials=user.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+  document.getElementById('sidebarInitial').textContent=initials;
+  document.getElementById('sidebarName').textContent=user.name;
+  const roleLabels={admin:'Administrador',brand_manager:'Brand Manager',analyst:'Analista'};
+  document.getElementById('sidebarRole').textContent=roleLabels[user.role]||user.role;
+
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  updateMarcaFilter();
+  initApp();
 }
 
 function doLogout(){
   currentUser=null;
+  // Reset filters
+  F={empresa:'',marca:'',año:'',mes:''};
+  ['fEmpresa','fMarca','fAno','fMes'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
   document.getElementById('loginScreen').style.display='flex';
   document.getElementById('app').style.display='none';
-  document.getElementById('loginUser').value='';
-  document.getElementById('loginPass').value='';
+  // Reset nav to dashboard
+  currentTab='dashboard';
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelector('[data-tab="dashboard"]').classList.add('active');
 }
-
-document.getElementById('loginPass').addEventListener('keypress',e=>{if(e.key==='Enter')doLogin();});
 
 // ══════════════════════════════════════════════════════════════════
 // APP INIT & NAVIGATION
@@ -1325,7 +1369,7 @@ function renderDashboard(){
     return`<div class="kpi-card ${k.color}">
       <div class="kpi-label">${k.label}</div>
       <div class="kpi-value">${k.value}</div>
-      <div class="kpi-sub">${k.sub||''} ${k.badge?`<span class="kpi-badge ${bc}">${pv>0?'▲':'▼'} ${k.badge}</span>`:''}</div>
+      <div class="kpi-sub">${k.sub||''} ${k.badge?('<span class="kpi-badge '+bc+'">'+(pv>0?'▲':'▼')+' '+k.badge+'</span>')  :''}</div>
     </div>`;
   }).join('');
 
@@ -1483,7 +1527,7 @@ function renderVentas(){
   document.getElementById('rankingCatBody').innerHTML=catRanking.map((r,i)=>{
     const vn=r.var;
     return`<tr>
-      <td class="rank-num ${i<3?'top'}">${i+1}</td>
+      <td class="rank-num ${i<3?'top':''}">${i+1}</td>
       <td>${r.cat}</td>
       <td class="num"><strong>${fmt(r.u25)}</strong></td>
       <td class="num">${fmt(r.u24)}</td>
@@ -1907,7 +1951,7 @@ function renderRanking(){
   const maxQty=rows[0]?.qty||1;
   document.getElementById('rankingHead').innerHTML='<tr><th>#</th><th>Cliente</th><th>Ciudad</th><th class="num">Uds. 2025</th><th class="num">Monto Gs.</th><th class="num">Categorías</th><th class="num">Marcas</th><th>Participación</th></tr>';
   document.getElementById('rankingBody').innerHTML=rows.map((r,i)=>`<tr>
-    <td class="rank-num ${i<3?'top'}">${i+1}</td>
+    <td class="rank-num ${i<3?'top':''}">${i+1}</td>
     <td><strong>${r.cliente}</strong></td>
     <td>${r.ciudad}</td>
     <td class="num">${fmt(r.qty)}</td>
@@ -1979,7 +2023,7 @@ function renderMapaTab(){
   const sorted=Object.values(byCiudad).sort((a,b)=>b.qty-a.qty);
   document.getElementById('mapaTableHead').innerHTML='<tr><th>#</th><th>Ciudad</th><th>Departamento</th><th class="num">Unidades</th><th class="num">Monto Gs.</th><th class="num">Clientes</th><th class="num">NGO</th><th class="num">CPH</th></tr>';
   document.getElementById('mapaTableBody').innerHTML=sorted.map((r,i)=>`<tr>
-    <td class="rank-num ${i<3?'top'}">${i+1}</td>
+    <td class="rank-num ${i<3?'top':''}">${i+1}</td>
     <td><strong>${r.nombre}</strong></td>
     <td>${r.dep}</td>
     <td class="num">${fmt(r.qty)}</td>
