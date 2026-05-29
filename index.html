@@ -1142,10 +1142,9 @@ function generateVentas(){
   return records;
 }
 
-let DB={ventas:[]};
-// Si se cargó datos_dashboard.js (datos reales), usarlos
+// Normalize records - ensure año field exists
 if(typeof window.DATOS_REALES !== 'undefined' && window.DATOS_REALES.length > 0){
-  DB.ventas = window.DATOS_REALES;
+  DB.ventas = window.DATOS_REALES.map(r=>({...r, año: r.año||r.ano||0}));
   console.log('✅ Datos reales cargados:', DB.ventas.length, 'registros');
 } else {
   DB.ventas = generateVentas();
@@ -1159,11 +1158,17 @@ let F={empresa:'',marca:'',año:'',mes:''};
 
 function getFiltered(extraFilters={}){
   return DB.ventas.filter(r=>{
+    const rAno = r.año || r.ano || 0;
     if(F.empresa&&r.empresa!==F.empresa)return false;
     if(F.marca&&r.brand!==F.marca)return false;
-    if(F.año&&r.año!==parseInt(F.año))return false;
+    if(F.año&&rAno!==parseInt(F.año))return false;
     if(F.mes&&r.mes!==parseInt(F.mes))return false;
-    for(const[k,v]of Object.entries(extraFilters)){if(v&&r[k]!==v)return false;}
+    for(const[k,v]of Object.entries(extraFilters)){
+      if(v){
+        const rv = k==='año'?(r.año||r.ano):r[k];
+        if(rv!==v)return false;
+      }
+    }
     return true;
   });
 }
